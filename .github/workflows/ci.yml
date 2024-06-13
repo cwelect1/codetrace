@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+    types: [opened, synchronize]
 
 jobs:
   build:
@@ -37,7 +38,6 @@ jobs:
       run: |
         . .venv/bin/activate
         python -m unittest discover -s tests -v
-        
 
     - name: Start Flask app
       run: |
@@ -58,3 +58,22 @@ jobs:
     - name: Stop Flask app
       run: |
         pkill -f "python mypython.py"
+
+  code_review_job:
+    runs-on: ubuntu-latest
+    name: CodeQL Analysis
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: python
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
