@@ -22,16 +22,17 @@ def main():
     for file_path in files_to_review:
         try:
             content = get_file_content(file_path)
-            response = openai.Completion.create(
-                engine="text-davinci-003",
-                prompt=f"Review the following Python code for any potential issues, improvements, or best practices:\n\n{content}",
+            response = openai.ChatCompletion.create(
+                model="gpt-4",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": f"Review the following Python code for any potential issues, improvements, or best practices:\n\n{content}"}
+                ],
                 max_tokens=1500,
-                n=1,
-                stop=None,
                 temperature=0.5,
             )
             print(f"Review for {file_path}:\n")
-            print(response.choices[0].text.strip())
+            print(response.choices[0].message['content'].strip())
             print("\n" + "="*80 + "\n")
         except Exception as e:
             print(f"Error reviewing {file_path}: {e}")
