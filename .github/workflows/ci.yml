@@ -67,7 +67,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: List repository files
-        run: ls -R /github/workspace
+        run: ls -R
 
       - name: GenAI Code Review
         uses: cirolini/genai-code-review@v2
