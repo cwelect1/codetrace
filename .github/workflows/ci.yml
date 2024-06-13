@@ -66,6 +66,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Debug step to print the pull request number
+      - name: Print PR number
+        run: echo "Pull Request Number: ${{ github.event.pull_request.number }}"
+
       # List repository files to confirm structure and file presence
       - name: List repository files
         run: ls -R
