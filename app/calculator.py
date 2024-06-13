@@ -13,6 +13,9 @@ def divide(x, y):
 def square(x):
   return x * x
 
+
+print("Hello, world!")
+
 # print("Welcome to the calculator!")
 
 # while True:
