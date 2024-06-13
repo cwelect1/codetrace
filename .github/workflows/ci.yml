@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+    types: [opened, synchronize]
 
 jobs:
   build:
@@ -37,7 +38,6 @@ jobs:
       run: |
         . .venv/bin/activate
         python -m unittest discover -s tests -v
-        
 
     - name: Start Flask app
       run: |
@@ -58,3 +58,23 @@ jobs:
     - name: Stop Flask app
       run: |
         pkill -f "python mypython.py"
+
+  code_review_job:
+    runs-on: ubuntu-latest
+    name: ChatGPT Code Review
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: GenAI Code Review
+        uses: cirolini/genai-code-review@v2
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_pr_id: ${{ github.event.number }}
+          openai_model: "gpt-3.5-turbo" # optional
+          openai_temperature: 0.5 # optional
+          openai_max_tokens: 2048 # optional
+          mode: files # files or patch
+          language: en # optional, default is 'en'
+          custom_prompt: "" # optional
